@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environment Monitoring System - Live Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://sets.hugeicons.com/YOUR-SET-ID.css" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            Environment Monitoring System
+        </div>
+        <ul class="nav-links">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#alerts">Alerts</a></li>
+            <li><a href="#history">History</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li>
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>System Online</span>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p class="last-update">Last updated: <span id="lastUpdate">--</span></p>
+        </div>
+
+        <!-- Real-time Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">🌡️</div>
+                <div class="metric-label">Temperature</div>
+                <div class="metric-value">
+                    <span id="temperature">--</span>
+                    <span class="metric-unit">°C</span>
+                </div>
+                <span class="metric-status status-good" id="tempStatus">Normal</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">💧</div>
+                <div class="metric-label">Humidity</div>
+                <div class="metric-value">
+                    <span id="humidity">--</span>
+                    <span class="metric-unit">%</span>
+                </div>
+                <span class="metric-status status-good" id="humidityStatus">Normal</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">💨</div>
+                <div class="metric-label">Air Quality (AQI)</div>
+                <div class="metric-value">
+                    <span id="airQuality">--</span>
+                    <span class="metric-unit">PPM</span>
+                </div>
+                <span class="metric-status status-good" id="aqStatus">Good</span>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">👁️</div>
+                <div class="metric-label">Motion Detection</div>
+                <div class="metric-value">
+                    <span id="motionStatus">No Motion</span>
+                </div>
+                <span class="metric-status status-good">Monitoring</span>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>Temperature Trend </h3>
+                <div class="chart-container">
+                    <canvas id="tempChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Humidity Trend </h3>
+                <div class="chart-container">
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Air Quality Trend</h3>
+                <div class="chart-container">
+                    <canvas id="aqChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Section -->
+        <div class="camera-section">
+            <h3><i class="hgi hgi-stroke hgi-camera-ai"></i>Live Camera Feeds</h3>
+            <div class="camera-grid">
+                <div class="camera-feed">
+                    <img id="camera1" src="https://via.placeholder.com/640x360/667eea/ffffff?text=Camera+1+-+Main+Entrance" alt="Camera 1">
+                    <div class="camera-overlay">
+                        <div>Main Entrance</div>
+                        <div class="camera-timestamp" id="cam1Time">--</div>
+                    </div>
+                </div>
+                <div class="camera-feed">
+                    <img id="camera2" src="https://via.placeholder.com/640x360/764ba2/ffffff?text=Camera+2+-+Monitoring+Zone" alt="Camera 2">
+                    <div class="camera-overlay">
+                        <div>Monitoring Zone</div>
+                        <div class="camera-timestamp" id="cam2Time">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="alerts-section" id="alerts">
+            <h3>Recent Alerts</h3>
+            <div id="alertsList"></div>
+        </div>
+
+        <!-- Historical Data Table -->
+        <div class="data-table" id="history">
+            <h3>Historical Data (Last 10 Readings)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Temperature (°C)</th>
+                        <th>Humidity (%)</th>
+                        <th>Air Quality (PPM)</th>
+                        <th>Motion</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Control Settings -->
+        <div class="controls-section" id="settings">
+            <h3> System Controls & Thresholds</h3>
+            <div class="controls-grid">
+                <div class="control-item">
+                    <label class="control-label">Temperature Alert (°C)</label>
+                    <input type="number" class="threshold-input" id="tempThreshold" value="35" step="0.5">
+                </div>
+                <div class="control-item">
+                    <label class="control-label">Humidity Alert (%)</label>
+                    <input type="number" class="threshold-input" id="humidityThreshold" value="80" step="1">
+                </div>
+                <div class="control-item">
+                    <label class="control-label">Air Quality Alert (PPM)</label>
+                    <input type="number" class="threshold-input" id="aqThreshold" value="200" step="10">
+                </div>
+                <div class="control-item">
+                    <label class="control-label">Alert Interval (seconds)</label>
+                    <input type="number" class="threshold-input" id="alertInterval" value="5" step="1">
+                </div>
+            </div>
+            <div class="export-section">
+                <button class="btn btn-primary" onclick="updateThresholds()"> <img class="icon" src="assets/save_setting.png" height="20px"> Save Settings</button>
+                <button class="btn btn-secondary" onclick="exportData()"> <img class="icon" src="assets/import-export.png" height="20px" > Export Data (CSV)</button>
+                <button class="btn btn-secondary" onclick="captureImage()"> <img class="icon" src="assets/capture.png" height="20px" > Capture Image Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</body>
+</html>
